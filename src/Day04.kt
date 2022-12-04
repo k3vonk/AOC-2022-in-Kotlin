@@ -2,7 +2,7 @@ fun main() {
 
     val assignments = readInput("Day04_test")
 
-    var count = 0
+    var part1 = 0
     var part2 = 0
     for (assignment in assignments) {
         val one = assignment
@@ -17,22 +17,16 @@ fun main() {
         val rangeOne = one.first() ..one.last()
         val rangeTwo = two.first() .. two.last()
         if (two.first() in rangeOne && two.last() in rangeOne) {
-            count++
+            part1++
         } else if (one.first() in rangeTwo && one.last() in rangeTwo) {
-            count++
-        }
-
-        if (two.first() in rangeOne) {
+            part1++
+        } else if (two.first() in rangeOne || two.last() in rangeOne) {
             part2++
-        } else if (two.last() in rangeOne) {
-            part2++
-        } else if (one.first() in rangeTwo) {
-            part2++
-        } else if (one.last() in rangeTwo) {
+        } else if (one.first() in rangeTwo || one.last() in rangeTwo) {
             part2++
         }
     }
 
-    println(count)
-    println(part2)
+    println(part1)
+    println(part1 + part2)
 }
