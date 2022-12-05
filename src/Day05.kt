@@ -19,6 +19,22 @@ fun main() {
     fun topOfEachStack(stacks: List<LinkedList<Char>>) =
         stacks.map { it.peek() }.joinToString(separator = "")
 
+    fun part1(stacks: List<LinkedList<Char>>, from: Int, to: Int, numberOfCrates: Int) {
+        for(i in 0 until numberOfCrates) {
+            val item = stacks[from - 1].pop()
+            stacks[to - 1].push(item)
+        }
+    }
+
+    fun part2(stacks: List<LinkedList<Char>>, from: Int, to: Int, numberOfCrates: Int) {
+        val tempStack = LinkedList<Char>()
+        for(i in 0 until numberOfCrates) {
+            val itemInStack2 = stacks[from - 1].pop()
+            tempStack.add(itemInStack2)
+        }
+        stacks[to - 1].addAll(0, tempStack)
+    }
+
     val data = readInput("Day05_test")
 
     val crates = data.take(8)
@@ -33,14 +49,8 @@ fun main() {
         val numberOfCrates = digits.first()
         val ( from, to ) = digits.takeLast(2)
 
-        val tempStack = LinkedList<Char>()
-        for(i in 0 until numberOfCrates) {
-            val item = stacksPart1[from - 1].pop()
-            val itemInStack2 = stacksPart2[from - 1].pop()
-            tempStack.add(itemInStack2)
-            stacksPart1[to - 1].push(item)
-        }
-        stacksPart2[to - 1].addAll(0, tempStack)
+        part1(stacksPart1, from, to, numberOfCrates)
+        part2(stacksPart2, from, to, numberOfCrates)
     }
 
     println(topOfEachStack(stacksPart1))
