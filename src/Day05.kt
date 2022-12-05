@@ -16,27 +16,33 @@ fun main() {
         return stacks
     }
 
-    fun part1(moves: List<String>, stacks: List<LinkedList<Char>>): String {
-        for (move in moves) {
-            val pattern = "[0-9]+".toRegex()
-            val digits = pattern.findAll(move).map { it.value.toInt() }.toList()
+    fun topOfEachStack(stacks: List<LinkedList<Char>>) =
+        stacks.map { it.peek() }.joinToString(separator = "")
 
-            val numberOfCrates = digits.first()
-            val transition = digits.takeLast(2)
-
-            for(i in 0 until numberOfCrates) {
-                val item = stacks[transition[0] - 1].pop()
-                stacks[transition[1] - 1].push(item)
-            }
-        }
-
-        return stacks.map { it.peek() }.joinToString(separator = "")
-    }
     val data = readInput("Day05_test")
 
     val crates = data.take(8)
-    val stacks = createStacks(crates)
+    val stacksPart1 = createStacks(crates)
+    val stacksPart2 = createStacks(crates)
     val moves = data.takeLast(data.size - 10) // I like magic numbers
 
-    println(part1(moves, stacks))
+    for (move in moves) {
+        val pattern = "[0-9]+".toRegex()
+        val digits = pattern.findAll(move).map { it.value.toInt() }.toList()
+
+        val numberOfCrates = digits.first()
+        val ( from, to ) = digits.takeLast(2)
+
+        val tempStack = LinkedList<Char>()
+        for(i in 0 until numberOfCrates) {
+            val item = stacksPart1[from - 1].pop()
+            val itemInStack2 = stacksPart2[from - 1].pop()
+            tempStack.add(itemInStack2)
+            stacksPart1[to - 1].push(item)
+        }
+        stacksPart2[to - 1].addAll(0, tempStack)
+    }
+
+    println(topOfEachStack(stacksPart1))
+    println(topOfEachStack(stacksPart2))
 }
