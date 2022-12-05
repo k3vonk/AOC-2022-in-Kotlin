@@ -1,17 +1,39 @@
 fun main() {
     fun part1(input: List<String>): Int {
-        return input.size
+        var highestCalories = 0
+        var currentCalories = 0
+        for (row in input) {
+            if (row.isEmpty()) {
+                if (currentCalories > highestCalories)
+                    highestCalories = currentCalories
+
+                currentCalories = 0
+                continue
+            }
+            currentCalories += row.toInt()
+        }
+        return highestCalories
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        val elfBaggage = mutableListOf<Int>()
+        var currentCalories = 0
+
+        for (row in input) {
+            if (row.isEmpty()) {
+                elfBaggage.add(currentCalories)
+                currentCalories = 0
+                continue
+            }
+            currentCalories += row.toInt()
+        }
+
+        elfBaggage.sort()
+        return elfBaggage.takeLast(3).sum()
     }
 
-    // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
+    val input = readInput("Day01_test")
 
-    val input = readInput("Day01")
     println(part1(input))
     println(part2(input))
 }
